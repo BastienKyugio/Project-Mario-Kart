@@ -160,7 +160,7 @@ protected:
 	float WheelRadius = 20.f;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Kart|Visual")
-	float MawWheelSteerAngle = 30.f;
+	float MaxWheelSteerAngle = 30.f;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Kart|Camera")
 	float BaseFieldOfView = 90.f;
@@ -259,7 +259,7 @@ private:
 	// Drift et Boost
 	void StartDrift();
 	void EndDrift();
-	void StartBoost();
+	void StartBoost(float Duration);
 	float GetCurrentMaxSpeed() const;
 	
 	//Visuel des roues
