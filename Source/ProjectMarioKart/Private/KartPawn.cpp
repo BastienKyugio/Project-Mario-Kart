@@ -10,6 +10,7 @@
 #include "GameFramework/PlayerController.h"
 #include "InputActionValue.h"
 //#include "KartGameMode.h"
+#include "KartGameMode.h"
 #include "GameFramework/SpringArmComponent.h"
 
 // Marge (en cm) sous les roues pour considérer que le kart touche le sol
@@ -86,16 +87,21 @@ void AKartPawn::BeginPlay()
     WheelRearRightBaseRotation = WheelRearRight->GetRelativeRotation();
 
     // Si la course n'a pas encore commencé, le kart attend le GO du GameMode
-    // (sans KartGameMode, le kart roule tout de suite)
-    /* (const AKartGameMode* GameMode = GetWorld()->GetAuthGameMode<AKartGameMode>())
+    //(sans KartGameMode, le kart roule tout de suite)
+    if (const AKartGameMode* GameMode = GetWorld()->GetAuthGameMode<AKartGameMode>())
     {
        bCanMove = GameMode->IsRaceStarted();
-    }*/
+    }
 }
 
 void AKartPawn::SetCanMove(bool bInCanMove)
 {   
     bCanMove = bInCanMove;
+}
+
+FVector AKartPawn::GetMoveDirection() const
+{
+   return GetActorForwardVector() * FMath::Sign(CurrentSpeed);
 }
 
 void AKartPawn::NotifyControllerChanged()
@@ -639,4 +645,52 @@ void AKartPawn::ShowDebugInfo() const
     GEngine->AddOnScreenDebugMessage(3, 0.f, FColor::Yellow, FString::Printf(TEXT("Boost: %.2f"), 
        BoostTimeRemaining));
 }
- 
+
+void AKartPawn::EnterLapZone(int32 ZoneIndex)
+{
+   const AKartGameMode* GameMode = GetWorld()->GetAuthGameMode<AKartGameMode>();
+   
+   if (GameMode == nullptr ||!GameMode->IsRaceStarted() || bHasFinishedRace)
+   {
+       return;
+   }
+   
+   if (ZoneIndex == NextCheckpoint)
+   {
+      ++NextCheckpoint;
+   }
+   else if (ZoneIndex == 0 && NextCheckpoint > GameMode->GetCheckpointCount())
+   {
+      CompleteLap();
+   }
+   
+}
+
+void AKartPawn::CompleteLap()
+{
+   AKartGameMode* GameMode = GetWorld()->GetAuthGameMode<AKartGameMode>();
+   if (GameMode == nullptr || bHasFinishedRace)
+   {
+      return;  
+   }
+   
+   NextCheckpoint = 1;
+   
+   if (CurrentLap >= GameMode->GetLapCount())
+   {
+      bHasFinishedRace = true;
+      FinishTime = GameMode->GetRaceTime();
+      GameMode->NotifyKartFinished(this);
+      return;
+   }
+   
+   ++CurrentLap;
+}
+
+void AKartPawn::ResetRaceProgress()
+{
+   CurrentLap = 1;
+   FinishTime = 0;
+   bHasFinishedRace = false;
+}
+   

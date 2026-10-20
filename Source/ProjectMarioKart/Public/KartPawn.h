@@ -33,6 +33,26 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Kart")
 	bool CanMove() const { return bCanMove; }
 	
+	UFUNCTION(BlueprintPure, Category = "Kart")
+	FVector GetMoveDirection() const;
+	
+	void EnterLapZone(int32 Index);
+	
+	UFUNCTION(BlueprintCallable, Category = "Kart|Race")
+	void CompleteLap();
+	
+	UFUNCTION(BlueprintCallable, Category = "Kart|Race")
+	void ResetRaceProgress();
+	
+	UFUNCTION(BlueprintPure, Category = "Kart|Race")
+	int32 GetCurrentLap() const { return CurrentLap; }
+	
+	UFUNCTION(BlueprintPure, Category = "Kart|Race")
+	bool HasFinishedRace() const { return bHasFinishedRace; }
+	
+	UFUNCTION(BlueprintPure, Category = "Kart|Race")
+	float GetFinishTime() const { return FinishTime; }
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -227,6 +247,18 @@ protected:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Kart|State")
 	bool bCanMove = true;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Kart|Race")
+	int32 CurrentLap = 1;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Kart|Race")
+	bool bHasFinishedRace = false;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Kart|Race")
+	float FinishTime = 0.f;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Kart|Race")
+	int32 NextCheckpoint = 1;
 	
 private:
 	// Fonction appelées par l'input
