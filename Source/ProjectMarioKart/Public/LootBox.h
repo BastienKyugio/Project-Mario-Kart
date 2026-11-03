@@ -1,4 +1,4 @@
-#pragma once
+/*#pragma once
 
 #include "CoreMinimal.h"
 #include "RotatingObject.h"
@@ -23,3 +23,4 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category="Components")
 	USphereComponent* Collision;
 };
+*/

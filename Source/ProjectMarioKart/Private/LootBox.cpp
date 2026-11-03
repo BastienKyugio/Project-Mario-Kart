@@ -1,4 +1,4 @@
-#include "LootBox.h"
+/*#include "LootBox.h"
 
 #include "KartPawn.h"
 #include "Components/SphereComponent.h"
@@ -43,3 +43,4 @@ void ALootBox::NotifyActorBeginOverlap(AActor* OtherActor)
 		Destroy();
 	}
 }
+*/
