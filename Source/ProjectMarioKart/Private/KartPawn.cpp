@@ -693,4 +693,12 @@ void AKartPawn::ResetRaceProgress()
    FinishTime = 0;
    bHasFinishedRace = false;
 }
-   
+
+void AKartPawn::ApplyBoost(float Duration)
+{
+   if (Duration > 0.f)
+   {
+      StartBoost(Duration);
+   }
+}
+ 

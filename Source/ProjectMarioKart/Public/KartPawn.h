@@ -53,6 +53,8 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Kart|Race")
 	float GetFinishTime() const { return FinishTime; }
 	
+	void ApplyBoost(float Duration);
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
