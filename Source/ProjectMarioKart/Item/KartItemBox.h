@@ -4,14 +4,14 @@
 #include "World/RotatingObject.h"
 #include "KartItemBox.generated.h"
 
-class UShpereComponent;
+class USphereComponent;
 class UStaticMeshComponent;
 class UKartItemPoolData;
 class UPrimitiveComponent;
 struct FHitResult;
 
 UCLASS()
-class ProjetMarioKart_API AKartItemBox : public ARotatingObject
+class PROJECTMARIOKART_API AKartItemBox : public ARotatingObject
 {
 	GENERATED_BODY()
 	
