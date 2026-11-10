@@ -54,7 +54,7 @@ public:
 	void NotifyKartFinished(AKartPawn* Kart);
 	
 	UFUNCTION(BlueprintPure, Category= "Kart|CountDown|Debug")
-	bool IsDebugTextEnabled() { return bShowDebugText; }
+	bool IsDebugTextEnabled() const { return bShowDebugText; }
 	
 	UFUNCTION(BlueprintPure, Category= "Kart|Race")
 	static FText FormatRaceTime(float Seconds);
