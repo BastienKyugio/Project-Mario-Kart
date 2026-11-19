@@ -7,7 +7,11 @@
 class UButton;
 class UTextBlock;
 class UWidgetSwitcher;
+class UPanelWidget;
 class UKartOptionSelector;
+class UKartOptionSlider;
+class UKartKeyBindingRow;
+class UInputMappingContext;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnOptionClosed);
 
@@ -35,6 +39,15 @@ protected:
 	TObjectPtr<UButton> GraphicsTabButton;
 	
 	UPROPERTY(meta=(BindWidget))
+	TObjectPtr<UButton> AudioTabButton;
+	
+	UPROPERTY(meta=(BindWidget))
+	TObjectPtr<UButton> GameTabButton;
+	
+	UPROPERTY(meta=(BindWidget))
+	TObjectPtr<UButton> ControlsTabButton;
+	
+	UPROPERTY(meta=(BindWidget))
 	TObjectPtr<UKartOptionSelector> ResolutionSelector;
 	
 	UPROPERTY(meta=(BindWidget))
@@ -48,6 +61,34 @@ protected:
 	
 	UPROPERTY(meta=(BindWidget))
 	TObjectPtr<UKartOptionSelector> FrameRateSelector;
+	
+	UPROPERTY(meta=(BindWidget))
+	TObjectPtr<UKartOptionSlider> MasterVolumeSlider;
+	
+	UPROPERTY(meta=(BindWidget))
+	TObjectPtr<UKartOptionSlider> MusicVolumeSlider;
+	
+	UPROPERTY(meta=(BindWidget))
+	TObjectPtr<UKartOptionSlider> SfxVolumeSlider;
+	
+	UPROPERTY(meta=(BindWidget))
+	TObjectPtr<UKartOptionSlider> FieldOfViewSlider;
+	
+	UPROPERTY(meta=(BindWidget))
+	TObjectPtr<UKartOptionSlider> LapCountSlider;
+	
+	UPROPERTY(meta=(BindWidget))
+	TObjectPtr<UPanelWidget> KeyBindingList;
+	
+	UPROPERTY(EditAnywhere, Category= "Kart|Options")
+	TSubclassOf<UKartKeyBindingRow> KeyBindingRowClass;
+	
+	UPROPERTY(EditAnywhere, Category= "Kart|Options")
+	TObjectPtr<UInputMappingContext> KeyBindingContext;
+	
+	UPROPERTY(EditAnywhere, Category= "Kart|Options")
+	TArray<FName> KeyMappingsNames = { "Accélérer", "Freiner", "TournerGauche", "TournerDroite", "Drift", "Sauter", "Objet"};
+	
 	
 	UPROPERTY(meta=(BindWidget))
 	TObjectPtr<UButton> ApplyButton;
@@ -77,11 +118,22 @@ private:
 	UFUNCTION()
 	void HandleGraphicsTabClicked();
 	
+	UFUNCTION()
+	void HandleAudioTabClicked();
+	
+	UFUNCTION()
+	void HandleGameTabClicked();
+	
+	UFUNCTION()
+	void HandleControlsTabClicked();
+	
 	void ShowTab(int32 TabIndex);
 	
 	void SetupGraphicsChoices();
 	
 	void LoadFromSettings();
+	
+	void BuildKeyBindingRow();
 	
 	UFUNCTION()
 	void HandleResolutionChanged(int32 NewIndex);
@@ -97,6 +149,21 @@ private:
 	
 	UFUNCTION()
 	void HandleFrameRateChanged(int32 NewIndex);
+	
+	UFUNCTION()
+	void HandleMasterVolumeChanged(float NewValue);
+	
+	UFUNCTION()
+	void HandleMusicVolumeChanged(float NewValue);
+	
+	UFUNCTION()
+	void HandleSfxVolumeChanged(float NewValue);
+	
+	UFUNCTION()
+	void HandleFieldOfViewChanged(float NewValue);
+	
+	UFUNCTION()
+	void HandleLapCountChanged(float NewValue);
 	
 	UFUNCTION()
 	void HandleApplyClicked();

@@ -1,10 +1,13 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "KartGameMode.h"
+
+#include "Engine/Engine.h"
 #include "EngineUtils.h"
 #include "Kismet/GameplayStatics.h"
 #include "KartPawn.h"
-//#include "KartPlayerController.h"
-//#include "LapZone.h"
+#include "KartPlayerController.h"
+#include "LapZone.h"
+#include "Settings/KartGameUserSettings.h"
 #include "TimerManager.h"
 
 
@@ -17,6 +20,11 @@ AKartGameMode::AKartGameMode()
 void AKartGameMode::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	if (const UKartGameUserSettings* Settings = UKartGameUserSettings::Get())
+	{
+		LapCount = Settings->GetLapCount();
+	}
 	
 	//CountCheckpoints();
 	

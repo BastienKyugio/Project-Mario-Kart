@@ -28,6 +28,11 @@ void UKartGameUserSettings::SetMasterVolume(float Value)
 
 void UKartGameUserSettings::SetMusicVolume(float Value)
 {
+	MusicVolume = FMath::Clamp(Value, 0.f, 1.f);
+}
+
+void UKartGameUserSettings::SetSfxVolume(float Value)
+{
 	SfxVolume = FMath::Clamp(Value, 0.f, 1.f);
 }
 

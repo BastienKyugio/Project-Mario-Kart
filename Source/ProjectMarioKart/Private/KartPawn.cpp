@@ -6,6 +6,7 @@
 #include "KartGameMode.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Item/KartItemComponent.h"
+#include "Settings/KartGameUserSettings.h"
 
 // Marge (en cm) sous les roues pour considérer que le kart touche le sol
 static constexpr float GroundSnapTolerance = 5.f;
@@ -67,6 +68,17 @@ void AKartPawn::BeginPlay()
     WheelFrontRightBaseRotation = WheelFrontRight->GetRelativeRotation();
     WheelRearLeftBaseRotation = WheelRearLeft->GetRelativeRotation();
     WheelRearRightBaseRotation = WheelRearRight->GetRelativeRotation();
+    
+    // Les champs de vision de la vitesse et du turbo gardent le meme ecart
+    if (const UKartGameUserSettings* Settings = UKartGameUserSettings::Get())
+    {
+        const float Offset = Settings->GetCameraFieldOfView();
+        BaseFieldOfView += Offset;
+        MaxSpeedFieldOfView += Offset;
+        BoostFieldOfView += Offset;
+        Camera->SetFieldOfView(BaseFieldOfView);
+    }
+    
     // Si la course n'a pas encore commencé, le kart attend le GO du GameMode
     // (sans KartGameMode, le kart roule tout de suite)
     if (const AKartGameMode* GameMode = GetWorld()->GetAuthGameMode<AKartGameMode>())

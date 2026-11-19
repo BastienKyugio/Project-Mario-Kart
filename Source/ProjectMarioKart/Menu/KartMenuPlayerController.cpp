@@ -2,6 +2,7 @@
 
 #include "Blueprint/UserWidget.h"
 #include "Menu/KartMainMenuWidget.h"
+#include "Settings/KartGameUserSettings.h"
 
 void AKartMenuPlayerController::BeginPlay()
 {
@@ -11,6 +12,12 @@ void AKartMenuPlayerController::BeginPlay()
 	{
 		return;
 	}
+	
+	if (const UKartGameUserSettings* Settings = UKartGameUserSettings::Get())
+	{
+		Settings->ApplyAudioSettings(this);
+	}
+	
 	if (MainMenuWidgetClass == nullptr)
 	{
 		return;

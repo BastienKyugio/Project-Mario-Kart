@@ -7,6 +7,8 @@
 #include "KartPawn.h"
 #include "KartRaceHudWidget.h"
 #include "Item/KartItemWidget.h"
+#include "Settings/KartGameUserSettings.h"
+#include "UObject/FastReferenceCollector.h"
 
 
 void AKartPlayerController::BeginPlay()
@@ -19,13 +21,20 @@ void AKartPlayerController::BeginPlay()
         return;
     }
     
+    if (const UKartGameUserSettings* Settings = UKartGameUserSettings::Get())
+    {
+        Settings->ApplyAudioSettings(this);
+    }
+    
     // On donne au joueur les touches du kart (avant, c'était le kart qui le faisait dans NotifyControllerChanged)
     // Le Mapping Context dit quelle touche déclenche quelle Input Action
     if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
     {
         if (KartMappingContext != nullptr)
         {
-            Subsystem->AddMappingContext(KartMappingContext, 0);
+            FModifyContextOptions Options;
+            Options.bNotifyUserSettings = true;
+            Subsystem->AddMappingContext(KartMappingContext, 0, Options);
         }
     }
     
