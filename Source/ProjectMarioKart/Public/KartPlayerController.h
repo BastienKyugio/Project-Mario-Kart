@@ -7,6 +7,7 @@
 class UKartCountdownWidget;
 class UKartRaceHudWidget;
 class UKartItemWidget;
+class UKartPauseMenuWidget;
 class UInputMappingContext;
 class UInputAction;
 class AKartPawn;
@@ -16,6 +17,12 @@ UCLASS()
 class PROJECTMARIOKART_API AKartPlayerController : public APlayerController
 {
     GENERATED_BODY()
+   
+public:
+    void PauseGame();
+    
+    void ResumeGame();
+    
 protected:
     virtual void BeginPlay() override;
     
@@ -29,6 +36,9 @@ protected:
     
     UPROPERTY(EditAnywhere, Category = "Kart|UI")
     TSubclassOf<UKartRaceHudWidget> RaceHudWidgetClass;
+    
+    UPROPERTY(EditAnywhere, Category = "Kart|UI")
+    TSubclassOf<UKartPauseMenuWidget> PauseMenuWidgetClass;
     
     UPROPERTY(EditAnywhere, Category = "Kart|Input")
     TObjectPtr<UInputMappingContext> KartMappingContext;
@@ -47,6 +57,9 @@ protected:
     
     UPROPERTY(EditAnywhere, Category = "Kart|Input")
     TObjectPtr<UInputAction> UseItemAction;
+    
+    UPROPERTY(EditAnywhere, Category = "Kart|Input")
+    TObjectPtr<UInputAction> PauseAction;
 
 private:
     void OnThrottle(const FInputActionValue& Value);
@@ -57,6 +70,7 @@ private:
     void OnDriftReleased(const FInputActionValue& Value);
     void OnJumpPressed(const FInputActionValue& Value);
     void OnUseItemPressed(const FInputActionValue& Value);
+    void OnPausePressed(const FInputActionValue& Value);
     
     AKartPawn* GetKart() const;
     
@@ -68,4 +82,7 @@ private:
     
     UPROPERTY()
     TObjectPtr<UKartRaceHudWidget> RaceHudWidget;
+    
+    UPROPERTY()
+    TObjectPtr<UKartPauseMenuWidget> PauseMenuWidget;
 };

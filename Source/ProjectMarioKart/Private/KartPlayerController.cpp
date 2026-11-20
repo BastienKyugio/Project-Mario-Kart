@@ -7,6 +7,7 @@
 #include "KartPawn.h"
 #include "KartRaceHudWidget.h"
 #include "Item/KartItemWidget.h"
+#include "Menu/KartPauseMenuWidget.h"
 #include "Settings/KartGameUserSettings.h"
 #include "UObject/FastReferenceCollector.h"
 
@@ -88,6 +89,7 @@ void AKartPlayerController::SetupInputComponent()
     EnhancedInput->BindAction(DriftAction, ETriggerEvent::Completed, this, &AKartPlayerController::OnDriftReleased);
     EnhancedInput->BindAction(JumpAction, ETriggerEvent::Started, this, &AKartPlayerController::OnJumpPressed);
     EnhancedInput->BindAction(UseItemAction, ETriggerEvent::Started, this, &AKartPlayerController::OnUseItemPressed);
+    EnhancedInput->BindAction(PauseAction, ETriggerEvent::Started, this, &AKartPlayerController::OnPausePressed);
 }
 
 AKartPawn* AKartPlayerController::GetKart() const
@@ -161,4 +163,43 @@ void AKartPlayerController::OnUseItemPressed(const FInputActionValue& Value)
     {
         Kart->UseItem();
     }
+}
+
+void AKartPlayerController::OnPausePressed(const FInputActionValue& Value)
+{
+    PauseGame();
+}
+
+void AKartPlayerController::PauseGame()
+{
+    if (IsPaused() || PauseMenuWidgetClass == nullptr)
+    {
+        return;
+    }
+    PauseMenuWidget = CreateWidget<UKartPauseMenuWidget>(this, PauseMenuWidgetClass);
+    if (PauseMenuWidget == nullptr)
+    {
+        return;
+    }
+    SetPause(true);
+    
+    PauseMenuWidget->AddToViewport(10);
+    
+    SetInputMode(FInputModeUIOnly());
+    bShowMouseCursor = true;
+    PauseMenuWidget->FocusDefaultButton();
+}
+
+void AKartPlayerController::ResumeGame()
+{
+    if (PauseMenuWidget != nullptr)
+    {
+        PauseMenuWidget->RemoveFromParent();
+        PauseMenuWidget = nullptr;
+    }
+    
+    SetPause(false);
+    SetInputMode(FInputModeGameOnly());
+    bShowMouseCursor = false;
+    
 }
