@@ -41,6 +41,10 @@ void UKartMainMenuWidget::HandleOptionsClicked()
 		return;
 	}
 	
+	OptionsWidget->OnClosed.AddDynamic(this, &UKartMainMenuWidget::HandleOptionsClosed);
+	OptionsWidget->AddToViewport();
+	OptionsWidget->FocusDefaultButton();
+	
 	SetVisibility(ESlateVisibility::Collapsed);
 	
 }

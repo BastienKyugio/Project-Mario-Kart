@@ -72,7 +72,7 @@ void AKartPawn::BeginPlay()
     // Les champs de vision de la vitesse et du turbo gardent le meme ecart
     if (const UKartGameUserSettings* Settings = UKartGameUserSettings::Get())
     {
-        const float Offset = Settings->GetCameraFieldOfView();
+        const float Offset = Settings->GetCameraFieldOfView() - BaseFieldOfView;
         BaseFieldOfView += Offset;
         MaxSpeedFieldOfView += Offset;
         BoostFieldOfView += Offset;
@@ -172,7 +172,7 @@ void AKartPawn::Tick(float DeltaTime)
     UpdateCameraFieldOfView(DeltaTime);
     // Le debug doit être réécrit à chaque frame (les messages ne durent qu'une frame),
     // mais la case, elle, a été lue une seule fois dans BeginPlay
-    if (bShowDebug)
+    if (bShowDebug && IsPlayerControlled())
     {
         ShowDebugInfo();
     }

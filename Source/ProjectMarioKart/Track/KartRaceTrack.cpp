@@ -45,7 +45,7 @@ void AKartRaceTrack::OnConstruction(const FTransform& Transform)
 	
 	for (int32 i = 0; i < SegmentCount; ++i)
 	{
-		USplineMeshComponent* Segment = NewObject<USplineComponent>(this);
+		USplineMeshComponent* Segment = NewObject<USplineMeshComponent>(this);
 		
 		Segment->CreationMethod = EComponentCreationMethod::UserConstructionScript;
 		Segment->SetStaticMesh(RoadMesh);
@@ -123,5 +123,5 @@ float AKartRaceTrack::GetTurnAngle(float FromDistance, float ToDistance) const
 	const FVector To = GetDirectionAtDistances(ToDistance).GetSafeNormal2D();
 	
 	const float Cos = FMath::Clamp(FVector::DotProduct(From, To), -1.f, 1.f);
-	return FMath::RadiansToDegrees(FMath::Acos(Cos));
+	return FMath::RadiansToDegrees(FMath::Acos(Cos)); 
 }

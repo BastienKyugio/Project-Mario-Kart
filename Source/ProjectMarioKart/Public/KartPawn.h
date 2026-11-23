@@ -34,6 +34,12 @@ public:
     UFUNCTION(BlueprintPure, Category = "Kart")
     FVector GetMoveDirection() const;
     
+    UFUNCTION(BlueprintPure, Category = "Kart")
+    float GetSpeed() const { return CurrentSpeed; }
+    
+    UFUNCTION(BlueprintPure, Category = "Kart")
+    bool IsDrifting() const { return bIsDrifting; }
+    
     // ---------- Commandes (envoyées par le controller : le joueur, ou plus tard une IA) ----------
     // Le kart ne lit aucune touche lui-même : il obéit à ces fonctions, peu importe qui les appelle
     // Accélérateur : +1 = accélérer, -1 = freiner / reculer, 0 = rien
