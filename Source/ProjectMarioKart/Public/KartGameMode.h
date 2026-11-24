@@ -11,6 +11,10 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCountdownTick, int32, Number);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnRaceStarted);
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnKartFinished, AKartPawn*, Kart);
+
+class AKartAIController;
+class UKartDriverProfile;
+
 UCLASS()
 class PROJECTMARIOKART_API AKartGameMode : public AGameModeBase
 {
@@ -59,10 +63,24 @@ public:
 	UFUNCTION(BlueprintPure, Category= "Kart|Race")
 	static FText FormatRaceTime(float Seconds);
 	
+	virtual AActor* ChoosePlayerStart_Implementation(AController* Player) override;
+	
 protected:
 	 
 	
 	virtual  void BeginPlay() override;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Kart|AI")
+	TSubclassOf<AKartPawn> AIKartClass;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Kart|AI")
+	TSubclassOf<AKartAIController> AIControllerClass;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Kart|AI")
+	TArray<TObjectPtr<UKartDriverProfile>> DriverProfiles;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Kart|AI", meta=(ClampMin = "0"))
+	int32 NumAIKarts = 5;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category= "Kart|Race", meta = (ClampMin = "1"))
 	int32 LapCount = 3;
@@ -89,6 +107,9 @@ protected:
 	float RaceDebugTextScale = 2.f;
 	
 private:
+	
+	void SpawnAIKarts();
+	
 	void BeginCountDown();
 	
 	void CountdownStep();

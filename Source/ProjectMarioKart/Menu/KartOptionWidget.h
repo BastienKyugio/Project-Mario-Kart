@@ -78,6 +78,9 @@ protected:
 	TObjectPtr<UKartOptionSlider> LapCountSlider;
 	
 	UPROPERTY(meta=(BindWidget))
+	TObjectPtr<UKartOptionSelector> DifficultySelector;
+	
+	UPROPERTY(meta=(BindWidget))
 	TObjectPtr<UPanelWidget> KeyBindingList;
 	
 	UPROPERTY(EditAnywhere, Category= "Kart|Options")
@@ -164,6 +167,9 @@ private:
 	
 	UFUNCTION()
 	void HandleLapCountChanged(float NewValue);
+	
+	UFUNCTION()
+	void HandleDifficultyChanged(int32 NewIndex);
 	
 	UFUNCTION()
 	void HandleApplyClicked();

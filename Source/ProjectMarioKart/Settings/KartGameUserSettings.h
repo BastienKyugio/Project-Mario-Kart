@@ -34,10 +34,14 @@ public:
 	int32 GetLapCount() const  { return LapCount; }
 	void SetLapCount(int32 Value);
 	
+	int32 GetDifficulty() const {return Difficulty; }
+	void SetDifficulty(int32 Value);
+	
 	static constexpr float MinFieldOfView = 70.f;
 	static constexpr float MaxFieldOfView = 110.f;
 	static constexpr int32 MinLapCount = 1;
 	static constexpr int32 MaxLapCount = 9;
+	static constexpr int32 MaxDifficulty = 2;
 	
 protected:
 	UPROPERTY(Config)
@@ -54,6 +58,9 @@ protected:
 	
 	UPROPERTY(Config)
 	int32 LapCount = 3;
+	
+	UPROPERTY(Config)
+	int32 Difficulty = 1;
 	
 private:
 	static void ApplyClassVolume(const UObject* WorldContext, USoundMix* SoundMix, USoundClass* SoundClass, float Volume);

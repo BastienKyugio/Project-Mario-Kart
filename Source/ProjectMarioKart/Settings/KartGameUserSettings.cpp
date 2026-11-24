@@ -19,6 +19,7 @@ void UKartGameUserSettings::SetToDefaults()
 	SfxVolume = 1.f;
 	CameraFieldOfView = 90.f;
 	LapCount = 3;
+	Difficulty = 1;
 }
 
 void UKartGameUserSettings::SetMasterVolume(float Value)
@@ -71,4 +72,9 @@ void UKartGameUserSettings::SetCameraFieldOfView(float Value)
 void UKartGameUserSettings::SetLapCount(int Value)
 {
 	LapCount = FMath::Clamp(Value, MinLapCount, MaxLapCount);
+}
+
+void UKartGameUserSettings::SetDifficulty(int32 Value)
+{
+	Difficulty = FMath::Clamp(Value, 0, MaxDifficulty);
 }

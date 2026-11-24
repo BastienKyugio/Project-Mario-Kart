@@ -24,7 +24,7 @@ public:
 	
 	float GetDistanceAlongTrack(const FVector& Location) const;
 	
-	FVector GetPointAtDistances(float Distance, float LateralOffset) const;
+	FVector GetPointAtDistances(float Distance, float LateralOffset = 0.f) const;
 	
 	float GetLateralOffset(const FVector& Location) const;
 	

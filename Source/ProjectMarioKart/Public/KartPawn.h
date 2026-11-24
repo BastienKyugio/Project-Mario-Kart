@@ -40,6 +40,9 @@ public:
     UFUNCTION(BlueprintPure, Category = "Kart")
     bool IsDrifting() const { return bIsDrifting; }
     
+    UFUNCTION(BlueprintCallable, Category = "Kart")
+    void SetSpeedMultiplier(float Multiplier);
+    
     // ---------- Commandes (envoyées par le controller : le joueur, ou plus tard une IA) ----------
     // Le kart ne lit aucune touche lui-même : il obéit à ces fonctions, peu importe qui les appelle
     // Accélérateur : +1 = accélérer, -1 = freiner / reculer, 0 = rien
@@ -384,6 +387,8 @@ private:
     void UpdateSpinOut(float DeltaTime);
 
     bool bShowDebug = false;
+    
+    float SpeedMultiplier = 1.f;
 
     FRotator BodyBaseRotation;
     FRotator SpringArmBaseRotation;

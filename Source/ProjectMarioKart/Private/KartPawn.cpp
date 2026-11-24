@@ -560,8 +560,15 @@ void AKartPawn::StartBoost(float Duration)
 }
 float AKartPawn::GetCurrentMaxSpeed() const
 {
-    return BoostTimeRemaining > 0.f ? BoostSpeed : MaxForwardSpeed;
+    const float BaseSpeed = BoostTimeRemaining > 0.f ? BoostSpeed : MaxForwardSpeed;
+    return BaseSpeed * SpeedMultiplier;
 }
+
+void AKartPawn::SetSpeedMultiplier(float Multiplier)
+{
+    SpeedMultiplier = FMath::Max(Multiplier, 0.1f);
+}
+
 void AKartPawn::ShowDebugInfo() const
 {
     if (GEngine == nullptr)

@@ -89,7 +89,8 @@ void UKartItemComponent::SetItem(UKartItemData* NewItem, int32 NewUses)
 	
 	OnItemChanged.Broadcast(CurrentItem, UsesLeft );
 	
-	if ( bShowDebugText && GEngine != nullptr )
+	const APawn* OwnerPawn = Cast<APawn>(GetOwner());
+	if ( bShowDebugText && GEngine != nullptr && OwnerPawn != nullptr && OwnerPawn->IsPlayerControlled() )
 	{
 		const FString ItemName = CurrentItem != nullptr ? CurrentItem->DisplayName.ToString() : TEXT("aucun");
 		GEngine->AddOnScreenDebugMessage(10, 2.f, FColor::Green, FString::Printf(TEXT("Objet : %s x%d"), *ItemName, UsesLeft ));

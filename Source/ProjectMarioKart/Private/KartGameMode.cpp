@@ -1,7 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "KartGameMode.h"
 
+#include  "AI/KartAIController.h"
+#include "AI/KartDriverProfile.h"
 #include "Engine/Engine.h"
+#include "GameFramework/PlayerStart.h"
 #include "EngineUtils.h"
 #include "Kismet/GameplayStatics.h"
 #include "KartPawn.h"
@@ -28,6 +31,8 @@ void AKartGameMode::BeginPlay()
 	
 	//CountCheckpoints();
 	
+	SpawnAIKarts();
+	
 	if (bUseCountdown)
 	{
 		StartCountdown();
@@ -36,6 +41,61 @@ void AKartGameMode::BeginPlay()
 	{
 		bRaceStarted = true;
 		RaceStartTime = GetWorld()->GetTimeSeconds();
+	}
+}
+
+AActor* AKartGameMode::ChoosePlayerStart_Implementation(AController* Player)
+{
+	for (TActorIterator<APlayerStart> It(GetWorld()); It; ++It)
+	{
+		if (It->PlayerStartTag == TEXT("Player"))
+		{
+			return *It;
+		}
+	}
+	return Super::ChoosePlayerStart_Implementation(Player);
+}
+
+void AKartGameMode::SpawnAIKarts()
+{
+	if (AIKartClass == nullptr || AIControllerClass == nullptr || NumAIKarts <=0)
+	{
+		return;
+	}
+	
+	TArray<APlayerStart*> GridSlots;
+	for (TActorIterator<APlayerStart> It(GetWorld()); It; ++It)
+	{
+		if (It->PlayerStartTag != TEXT("Player"))
+		{
+			GridSlots.Add(*It);
+		}
+	}
+	
+	GridSlots.Sort([](const APlayerStart& A, const APlayerStart& B) {return A.GetName() < B.GetName(); });
+	
+	const int32 Count = FMath::Min(NumAIKarts, GridSlots.Num());
+	if (Count < NumAIKarts)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Seulement %d PlayerStart libres pour %d IA"), GridSlots.Num(), NumAIKarts);
+	}
+	FActorSpawnParameters Params;
+	
+	Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+	
+	for (int32 i = 0; i < Count; ++i)
+	{
+		AKartPawn* AIKart = GetWorld()->SpawnActor<AKartPawn>(AIKartClass, GridSlots[i]->GetActorTransform(), Params);
+		AKartAIController* Pilot = GetWorld()->SpawnActor<AKartAIController>(AIControllerClass);
+		if (AIKart == nullptr || Pilot == nullptr)
+		{
+			continue;
+		}
+		if (DriverProfiles.Num() > 0)
+		{
+			Pilot->SetDriverProfile(DriverProfiles[i % DriverProfiles.Num()]);
+		}
+		Pilot->Possess(AIKart);
 	}
 }
 

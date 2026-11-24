@@ -45,6 +45,9 @@ void UKartOptionWidget::NativeOnInitialized()
 	FieldOfViewSlider->OnValueChanged.AddDynamic(this, &UKartOptionWidget::HandleFieldOfViewChanged);
 	LapCountSlider->OnValueChanged.AddDynamic(this, &UKartOptionWidget::HandleLapCountChanged);
 	
+	DifficultySelector->SetChoices({FText::FromString(TEXT("Facile")), FText::FromString(TEXT("Normale")), FText::FromString(TEXT("Difficile")) });
+	DifficultySelector->OnSelectionChanged.AddDynamic(this, &UKartOptionWidget::HandleDifficultyChanged);
+	
 	BuildKeyBindingRow();
 	
 	//Les boutons du bas et de confirmation
@@ -171,6 +174,7 @@ void UKartOptionWidget::LoadFromSettings()
 	//Jeu
 	FieldOfViewSlider->SetValue(Settings->GetCameraFieldOfView());
 	LapCountSlider->SetValue(Settings->GetLapCount());
+	DifficultySelector->SetSelectedIndex(Settings->GetDifficulty());
 }
 
 void UKartOptionWidget::BuildKeyBindingRow()
@@ -281,6 +285,14 @@ void UKartOptionWidget::HandleLapCountChanged(float NewValue)
 	if (UKartGameUserSettings* Settings = UKartGameUserSettings::Get())
 	{
 		Settings->SetLapCount(FMath::RoundToInt(NewValue));
+	}
+}
+
+void UKartOptionWidget::HandleDifficultyChanged(int32 NewIndex)
+{
+	if (UKartGameUserSettings* Settings = UKartGameUserSettings::Get())
+	{
+		Settings->SetDifficulty(NewIndex);
 	}
 }
 
